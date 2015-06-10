@@ -1,0 +1,11 @@
+jar { baseName = 'bigmock-container' }
+
+bootRepackage {
+	mainClass = 'com.hadoop.bigmock.container.Application'
+	enabled = true
+}
+
+dependencies {
+	
+	compile("org.springframework.boot:spring-boot-starter")
+}

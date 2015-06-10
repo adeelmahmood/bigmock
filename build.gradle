@@ -10,21 +10,18 @@ buildscript {
 allprojects {  group = 'com.hadoop.bigmock' }
 
 ext {
-	javaprojects = subprojects.findAll { project -> (project.name != 'api' && project.name != 'connectors') }
+	yarnprojects = subprojects.findAll { project -> (project.name == 'bigmock-yarn') }
+	bootprojects =  subprojects - yarnprojects
 }
 
-configure(javaprojects) {
+subprojects() {
 
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
-	apply plugin: 'spring-boot'
-	apply plugin: 'io.spring.dependency-management'
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
-
-	bootRepackage {  enabled = false  }
 
 	repositories {
 		mavenLocal()
@@ -39,10 +36,7 @@ configure(javaprojects) {
 		all*.exclude module: 'log4j-over-slf4j'
 	}
 
-	dependencies {
-		compile("org.springframework.boot:spring-boot-starter")
-		testCompile("org.springframework.boot:spring-boot-starter-test")
-	}
+	dependencies {  }
 
 	if (JavaVersion.current().isJava8Compatible()) {
 		allprojects {
@@ -59,6 +53,16 @@ configure(javaprojects) {
 			containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
 		}
 	}
+}
+
+configure(bootprojects) {
+
+	apply plugin: 'spring-boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	bootRepackage {  enabled = false  }
+
+	dependencies { testCompile("org.springframework.boot:spring-boot-starter-test")  }
 }
 
 task wrapper(type: Wrapper) { gradleVersion = '2.3' }
