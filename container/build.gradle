@@ -8,4 +8,18 @@ bootRepackage {
 dependencies {
 	
 	compile("org.springframework.boot:spring-boot-starter")
+	
+	compile "com.google.guava:guava:14.0.1"
+	compile ("org.apache.curator:curator-recipes:$curatorVersion") {
+		exclude group: "javax.mail", module: "mail"
+		exclude group: "org.slf4j", module: "slf4j-log4j12"
+		exclude group: "log4j", module: "log4j"
+	}
+
+	testCompile ("org.apache.curator:curator-test:$curatorVersion") {
+		exclude group: "org.slf4j", module: "slf4j-log4j12"
+		exclude group: "log4j", module: "log4j"
+	}
+	
+	
 }

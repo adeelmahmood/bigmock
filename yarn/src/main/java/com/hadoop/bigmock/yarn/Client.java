@@ -1,5 +1,6 @@
 package com.hadoop.bigmock.yarn;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -8,8 +9,10 @@ import java.util.Properties;
 import java.util.Vector;
 
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DataOutputBuffer;
 import org.apache.hadoop.security.Credentials;
 import org.apache.hadoop.security.UserGroupInformation;
@@ -135,10 +138,18 @@ public class Client {
 		// add application master jar to resource
 		ResourceUtils.addLocalResource(fs, clientProperties.getProperty("amJar"), "am.jar", appName, appId.toString(),
 				localResources);
+		// add am properties file if provided at runtime
+		if (new File("am.properties").exists()) {
+			ResourceUtils.addLocalResource(fs, "am.properties", "am.properties", appName, appId.toString(),
+					localResources);
+		}
+
 		// add container jar
-		LocalResource containerResource = ResourceUtils.addLocalResource(fs,
-				clientProperties.getProperty("containerJar"), "container.jar", appName, appId.toString(),
-				localResources);
+		String containerJar = clientProperties.getProperty("containerJar");
+		String suffix = appName + Path.SEPARATOR + appId + Path.SEPARATOR + FilenameUtils.getName(containerJar);
+		Path dest = new Path(fs.getHomeDirectory(), suffix);
+		log.info("uploading container jar [" + containerJar + "] to hdfs [" + dest.toString() + "]");
+		fs.copyFromLocalFile(new Path(containerJar), dest);
 
 		// specify local resource on container
 		appContainer.setLocalResources(localResources);
@@ -155,7 +166,7 @@ public class Client {
 			classPathEnv.append(c.trim());
 		}
 		env.put("CLASSPATH", classPathEnv.toString());
-		env.put("CONTAINER_JAR_PATH", containerResource.getResource().getFile().toString());
+		env.put("CONTAINER_JAR_PATH", dest.toString());
 
 		// specify environment on container
 		appContainer.setEnvironment(env);
