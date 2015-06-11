@@ -1,2 +1,2 @@
 zk:
- host: blpd604.bhdc.att.com:2181
+ host: localhost:2181

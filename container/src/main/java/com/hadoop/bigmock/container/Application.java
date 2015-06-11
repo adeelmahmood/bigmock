@@ -9,7 +9,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hadoop.bigmock.container.utils.Constants;
 
 @SpringBootApplication
@@ -31,6 +35,15 @@ public class Application implements CommandLineRunner {
 			throw new RuntimeException("error in creating curator client", e);
 		}
 		return curatorFramework;
+	}
+
+	@Bean
+	@Primary
+	public ObjectMapper mapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		return mapper;
 	}
 
 	public static void main(String[] args) {

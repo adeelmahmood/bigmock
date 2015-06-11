@@ -21,5 +21,8 @@ dependencies {
 		exclude group: "log4j", module: "log4j"
 	}
 	
+	compile(project(":bigmock-common"))
 	
+	compile "com.fasterxml.jackson.core:jackson-core"
+	compile "com.fasterxml.jackson.core:jackson-databind"
 }

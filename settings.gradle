@@ -5,3 +5,6 @@ project(':yarn').name = 'bigmock-yarn'
 
 include 'container'
 project(':container').name = 'bigmock-container'
+
+include 'common'
+project(':common').name = 'bigmock-common'

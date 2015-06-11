@@ -9,6 +9,7 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.utils.EnsurePath;
+import org.apache.curator.utils.ZKPaths;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,12 +61,11 @@ public class Worker {
 		// @formatter:on
 
 		// initialie assignments cache
-		assignments = new PathChildrenCache(client, Constants.ZK_ASSIGNED_PATH + "/" + workerId, false);
+		assignments = new PathChildrenCache(client, Constants.ZK_ASSIGNED_PATH + "/" + workerId, true);
 		assignments.start();
 
 		// register a listener
 		assignments.getListenable().addListener(assignmentsListener);
-
 	}
 
 	PathChildrenCacheListener assignmentsListener = new PathChildrenCacheListener() {
@@ -73,12 +73,11 @@ public class Worker {
 		public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
 			switch (event.getType()) {
 			case CHILD_ADDED:
-				log.info("worker acknowleding assignment of " + event.getData().getPath());
-				log.info("at the moment cache looks like this");
-				log.info(assignments.toString());
+				log.info("child added " + ZKPaths.getNodeFromPath(event.getData().getPath()));
 				break;
 			default:
 				log.info("worker received event " + event);
+				break;
 			}
 		}
 	};
