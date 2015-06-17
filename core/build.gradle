@@ -1,0 +1,33 @@
+jar { baseName = 'bigmock-core' }
+
+dependencies {
+
+	compile("org.springframework.boot:spring-boot-starter")
+
+	compile("io.projectreactor:reactor-core:$reactorVersion")
+	compile "io.projectreactor.spring:reactor-spring-context:$reactorSpringVersion"
+
+	compile ("org.springframework.data:spring-data-hadoop:${springHadoopVersion}") {
+		exclude module: "spring-data-hadoop-batch"
+		exclude module: "hadoop-common"
+		exclude module: "hadoop-yarn-common"
+		exclude module: "hadoop-hdfs"
+		exclude module: "hadoop-streaming"
+		exclude module: "hadoop-mapreduce-client-jobclient"
+		exclude module: "hadoop-mapreduce-client-core"
+		exclude module: "spring-data-hadoop-pig"
+		exclude module: "hadoop-distcp"
+	}
+
+	compile "com.att.datalake.hadoop:hadoop-common:${hadoopVersion}"
+	compile "com.att.datalake.hadoop:hive-hcatalog-core:${hcatalogVersion}"
+	compile "com.att.datalake.hadoop:hive-hcatalog-webhcat-client:${hcatalogVersion}"
+	compile "com.att.datalake.hadoop:hbase-common:${hbaseVersion}"
+	compile "com.att.datalake.hadoop:hbase-client:${hbaseVersion}"
+	compile "com.att.datalake.hadoop:hbase-protocol-local:${hbaseVersion}"
+	compile "com.google.protobuf:protobuf-java:2.5.0"
+
+	compile "joda-time:joda-time"
+
+	compile "commons-io:commons-io:2.4"
+}

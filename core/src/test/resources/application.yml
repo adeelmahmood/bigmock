@@ -1,0 +1,6 @@
+num:
+ workers: 10
+ 
+logging.level:
+ org.springframework: INFO
+ com.hadoop.bigmock.core: DEBUG

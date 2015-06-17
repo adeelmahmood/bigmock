@@ -1,2 +1,7 @@
 zk:
  host: localhost:2181
+ 
+logging.level:
+ com.hadoop.bigmock: DEBUG
+ org.springframework: INFO
+ org.apache.zookeeper: WARN

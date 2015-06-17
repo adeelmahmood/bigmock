@@ -26,6 +26,9 @@ subprojects() {
 	repositories {
 		mavenLocal()
 		mavenCentral()
+		maven { url 'http://maven.springframework.org/milestone/' }
+		maven { url 'http://repo.spring.io/libs-milestone' }
+		maven { url 'http://repo.spring.io/snapshot' }
 	}
 
 	configurations.all {

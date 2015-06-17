@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Primary;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hadoop.bigmock.container.tasks.TaskWorker;
 import com.hadoop.bigmock.container.utils.Constants;
 
 @SpringBootApplication
@@ -51,7 +52,7 @@ public class Application implements CommandLineRunner {
 	}
 
 	@Autowired
-	private Worker worker;
+	private TaskWorker worker;
 
 	@Override
 	public void run(String... args) throws Exception {
